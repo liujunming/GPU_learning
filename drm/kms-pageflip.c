@@ -1,3 +1,13 @@
+/**
+FLAGS=`pkg-config --cflags --libs libdrm libkms`
+FLAGS+=-Wall -O0 -g
+FLAGS+=-D_FILE_OFFSET_BITS=64
+FLAGS+=-lcairo
+
+all:
+        gcc -o kms-pageflip kms-pageflip.c $(FLAGS)
+
+**/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,8 +20,8 @@
 #include <math.h>
 #include <xf86drm.h>
 #include <xf86drmMode.h>
-#include <libkms.h>
-#include <cairo.h>
+#include <libkms/libkms.h>
+#include <cairo/cairo.h>
 
 struct flip_context{
 	int fb_id[2];
