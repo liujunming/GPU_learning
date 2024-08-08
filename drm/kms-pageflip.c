@@ -180,9 +180,9 @@ void page_flip_handler(int fd, unsigned int frame,
 int main(int argc, char *argv[])
 {
 	int fd, pitch, bo_handle, fb_id, second_fb_id;
-	drmModeRes *resources;
-	drmModeConnector *connector;
-	drmModeEncoder *encoder;
+	drmModeRes *resources = NULL;
+	drmModeConnector *connector = NULL;
+	drmModeEncoder *encoder = NULL;
 	drmModeModeInfo mode;
 	drmModeCrtcPtr orig_crtc;
 	struct kms_driver *kms_driver;
@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
 		encoder = drmModeGetEncoder(fd, resources->encoders[i]);
 		if(encoder != NULL){
 			fprintf(stderr, "encoder %d found\n", encoder->encoder_id);
-			if(encoder->encoder_id == connector->encoder_id);
+			if(encoder->encoder_id == connector->encoder_id)
 				break;
 			drmModeFreeEncoder(encoder);
 		} else
@@ -374,6 +374,8 @@ free_kms_driver:
 	kms_destroy(&kms_driver);
 	
 free_drm_res:
+	drmModeFreeEncoder(encoder);
+	drmModeFreeConnector(connector);
 	drmModeFreeResources(resources);
 
 close_fd:
